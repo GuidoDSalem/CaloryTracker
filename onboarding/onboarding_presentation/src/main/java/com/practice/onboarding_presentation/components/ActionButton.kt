@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.practice.core_ui.LocalSpacing
-import java.time.format.TextStyle
+import androidx.compose.ui.text.TextStyle
 
 @Composable
 fun ActionButton(
@@ -17,7 +17,7 @@ fun ActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled:Boolean = true,
-    textStyle: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.button
+    textStyle: TextStyle = MaterialTheme.typography.button
 ) {
     Button(
         onClick = onClick,

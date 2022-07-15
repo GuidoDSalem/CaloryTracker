@@ -9,14 +9,17 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.practice.core.R
+import com.practice.core.navigation.Route
+import com.practice.core.util.UIEvent
 import com.practice.core_ui.LocalSpacing
 import com.practice.onboarding_presentation.components.ActionButton
 
 
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(
+    onNavigate:(UIEvent.Navigate)->Unit
+) {
     val spacing = LocalSpacing.current
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -29,7 +32,7 @@ fun WelcomeScreen() {
         ActionButton(
             text = stringResource(id = R.string.next),
             modifier = Modifier.align(CenterHorizontally),
-            onClick = { /*TODO*/ }
+            onClick = { onNavigate(UIEvent.Navigate(Route.AGE)) }
 
         )
         
