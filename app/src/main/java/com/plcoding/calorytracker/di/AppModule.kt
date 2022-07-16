@@ -16,24 +16,23 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-
     @Provides
     @Singleton
     fun provideSharedPreferences(
         app: Application
     ): SharedPreferences {
-        return app.getSharedPreferences("shared_pref",MODE_PRIVATE)
+        return app.getSharedPreferences("shared_pref", MODE_PRIVATE)
     }
 
     @Provides
     @Singleton
-    fun providePreferences(sharedPreferences: SharedPreferences):Preferences{
+    fun providePreferences(sharedPreferences: SharedPreferences): Preferences {
         return DefaultPreferences(sharedPreferences)
     }
 
     @Provides
     @Singleton
-    fun providesFilterOutDigitUseCase():FilterOutDigits{
+    fun provideFilterOutDigitsUseCase(): FilterOutDigits {
         return FilterOutDigits()
     }
 }
