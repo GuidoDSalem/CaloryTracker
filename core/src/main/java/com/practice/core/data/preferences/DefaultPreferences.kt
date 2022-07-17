@@ -46,7 +46,7 @@ class DefaultPreferences(
             .apply()
     }
 
-    override fun saveCarbonRatio(ratio: Float) {
+    override fun saveCarbsRatio(ratio: Float) {
         sharedPref.edit()
             .putFloat(Preferences.KEY_ACTIVITY_LEVEL,ratio)
             .apply()
