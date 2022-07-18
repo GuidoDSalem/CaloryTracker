@@ -1,4 +1,4 @@
-package com.practice.core.domain
+package com.practice.core.domain.preferences
 
 import android.content.SharedPreferences
 import com.practice.core.domain.model.ActivityLevel
@@ -90,6 +90,17 @@ class DefaultPreferences(
         )
 
 
+    }
+
+    override fun saveShouldShowOnBoarding(shouldShow: Boolean) {
+        sharedPref.edit()
+            .putBoolean(Preferences.KEY_SHOULD_SHOW_ONBOARDING,shouldShow).apply()
+    }
+
+    override fun loadShouldShowOnBoarding(): Boolean {
+        return sharedPref.getBoolean(
+            Preferences.KEY_SHOULD_SHOW_ONBOARDING,true
+        )
     }
 
 }
