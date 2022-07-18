@@ -1,4 +1,4 @@
-package com.practice.core.data.preferences
+package com.practice.core.domain
 
 import android.content.SharedPreferences
 import com.practice.core.domain.model.ActivityLevel

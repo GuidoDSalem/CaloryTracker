@@ -17,6 +17,7 @@ interface Preferences {
     fun saveFatRatio(ratio:Float)
 
     fun loadUserInfo(): UserInfo
+
     companion object{
         const val KEY_GENDER = "gender"
         const val KEY_AGE = "age"
