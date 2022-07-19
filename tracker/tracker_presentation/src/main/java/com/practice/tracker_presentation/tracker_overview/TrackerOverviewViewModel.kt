@@ -118,9 +118,7 @@ class TrackerOverviewViewModel @Inject constructor(
                     )
 
                 }
-
             )
-
         }.launchIn(viewModelScope)
     }
 }
