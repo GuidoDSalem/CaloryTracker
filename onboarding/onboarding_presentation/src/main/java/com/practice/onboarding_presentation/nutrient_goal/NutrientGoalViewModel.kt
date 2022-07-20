@@ -48,7 +48,7 @@ class NutrientGoalViewModel @Inject constructor(
                 )
                 when(result){
                     is ValidateNutrients.Result.Success ->{
-                        preferences.saveCarbsRatio(result.carbsRatio)
+                        preferences.saveCarbRatio(result.carbsRatio)
                         preferences.saveProteinRatio(result.proteinRatio)
                         preferences.saveFatRatio(result.fatRatio)
                         viewModelScope.launch{
