@@ -74,40 +74,41 @@ fun ExpandableMeal(
                         },
                         tint = Color.Black
                     )
-                    Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ){
-                        UnitDisplay(
-                            amount = meal.calories,
-                            unit = stringResource(id = R.string.kcal),
-                            amountTextSize = 30.sp,
-                        )
-                        Row(){
-                            NutrientsInfo(
-                                name = stringResource(id = R.string.carbs),
-                                amount = meal.carbs,
-                                unit = stringResource(id = R.string.grams)
-                            )
-                            Spacer(modifier = Modifier.width(spacing.spaceSmall))
-                            
-                            NutrientsInfo(
-                                name = stringResource(id = R.string.protein),
-                                amount = meal.protein,
-                                unit = stringResource(id = R.string.grams)
-                            )
-                            Spacer(modifier = Modifier.width(spacing.spaceSmall))
-                            NutrientsInfo(
-                                name = stringResource(id = R.string.fat),
-                                amount = meal.fat,
-                                unit = stringResource(id = R.string.grams)
-                            )
-                        }
-                    }
-
-
                 }
+                Spacer(modifier = Modifier.height(spacing.spaceSmall))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ){
+                    UnitDisplay(
+                        amount = meal.calories,
+                        unit = stringResource(id = R.string.kcal),
+                        amountTextSize = 30.sp,
+                    )
+                    Row(){
+                        NutrientsInfo(
+                            name = stringResource(id = R.string.carbs),
+                            amount = meal.carbs,
+                            unit = stringResource(id = R.string.grams)
+                        )
+                        Spacer(modifier = Modifier.width(spacing.spaceSmall))
+
+                        NutrientsInfo(
+                            name = stringResource(id = R.string.protein),
+                            amount = meal.protein,
+                            unit = stringResource(id = R.string.grams)
+                        )
+                        Spacer(modifier = Modifier.width(spacing.spaceSmall))
+                        NutrientsInfo(
+                            name = stringResource(id = R.string.fat),
+                            amount = meal.fat,
+                            unit = stringResource(id = R.string.grams)
+                        )
+                    }
+                }
+
+
+
             }
 
         }
