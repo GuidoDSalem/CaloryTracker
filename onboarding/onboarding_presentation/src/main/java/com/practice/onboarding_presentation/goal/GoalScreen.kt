@@ -24,36 +24,34 @@ import kotlinx.coroutines.flow.collect
 
 @Composable
 fun GoalScreen(
-    onNavigate:(UIEvent.Navigate) ->Unit,
+    onNextClick: () -> Unit,
     viewModel: GoalViewModel = hiltViewModel()
 ) {
     val spacing = LocalSpacing.current
-    LaunchedEffect(key1 = true){
-        viewModel.uiEvent.collect{ event ->
-            when(event){
-                is UIEvent.Navigate -> onNavigate(event)
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UIEvent.Success -> onNextClick()
                 else -> Unit
             }
         }
     }
-    
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(spacing.spaceLarge)
-
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Text(
                 text = stringResource(id = R.string.lose_keep_or_gain_weight),
                 style = MaterialTheme.typography.h3
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
-            Row() {
+            Row {
                 SelectableButton(
                     text = stringResource(id = R.string.lose),
                     isSelected = viewModel.selectedGoal is GoalType.LoseWeight,
@@ -98,7 +96,6 @@ fun GoalScreen(
             text = stringResource(id = R.string.next),
             onClick = viewModel::onNextClick,
             modifier = Modifier.align(Alignment.BottomEnd)
-
         )
     }
 }

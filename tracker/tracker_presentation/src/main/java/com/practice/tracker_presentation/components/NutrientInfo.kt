@@ -15,23 +15,21 @@ import androidx.compose.ui.unit.sp
 import com.practice.core_ui.LocalSpacing
 
 @Composable
-fun NutrientsInfo(
+fun NutrientInfo(
     name: String,
     amount: Int,
     unit: String,
     modifier: Modifier = Modifier,
     amountTextSize: TextUnit = 20.sp,
     amountColor: Color = MaterialTheme.colors.onBackground,
-    unitTextSize: TextUnit = 10.sp,
+    unitTextSize: TextUnit = 14.sp,
     unitColor: Color = MaterialTheme.colors.onBackground,
-    nametextStyle: TextStyle = MaterialTheme.typography.body2
+    nameTextStyle: TextStyle = MaterialTheme.typography.body1
 ) {
-
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ){
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         UnitDisplay(
             amount = amount,
             unit = unit,
@@ -42,12 +40,9 @@ fun NutrientsInfo(
         )
         Text(
             text = name,
-            style = nametextStyle,
             color = MaterialTheme.colors.onBackground,
+            style = nameTextStyle,
             fontWeight = FontWeight.Light
         )
-
     }
-    
-
 }

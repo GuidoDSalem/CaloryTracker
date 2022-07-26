@@ -35,7 +35,7 @@ fun UnitDisplay(
             )
             Spacer(modifier = Modifier.width(spacing.spaceExtraSmall))
             Text(
-                text = amount.toString(),
+                text = unit,
                 style = MaterialTheme.typography.body1,
                 fontSize = unitTextSize,
                 color = unitColor,

@@ -25,100 +25,90 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.practice.core.R
 import com.practice.core_ui.LocalSpacing
-import com.practice.tracker_presentation.components.NutrientsInfo
+import com.practice.tracker_presentation.components.NutrientInfo
 import com.practice.tracker_presentation.components.UnitDisplay
 import com.practice.tracker_presentation.tracker_overview.Meal
+
 
 @Composable
 fun ExpandableMeal(
     meal: Meal,
-    content:@Composable () -> Unit,
     onToggleClick: () -> Unit,
-    modifier: Modifier,
-
-){
+    content: @Composable () -> Unit,
+    modifier: Modifier
+) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
-
     Column(
         modifier = modifier
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onToggleClick() }
-                .padding(spacing.spaceMedium)
-            ,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ){
-            Image(painter = painterResource(id = meal.drawableRes), contentDescription = meal.name.asString(context) )
+                .padding(spacing.spaceMedium),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = meal.drawableRes),
+                contentDescription = meal.name.asString(context)
+            )
             Spacer(modifier = Modifier.width(spacing.spaceMedium))
             Column(
                 modifier = Modifier.weight(1f)
-            ){
+            ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Text(
                         text = meal.name.asString(context),
-                        style = MaterialTheme.typography.h3,
-                        color = MaterialTheme.colors.primary,
+                        style = MaterialTheme.typography.h3
                     )
                     Icon(
-                        imageVector = if(meal.isExpanded)Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        contentDescription = if(meal.isExpanded) {stringResource(id = R.string.collapse)}
-                        else    {stringResource(id = R.string.extend)
-                        },
-                        tint = Color.Black
+                        imageVector = if (meal.isExpanded) {
+                            Icons.Default.KeyboardArrowUp
+                        } else Icons.Default.KeyboardArrowDown,
+                        contentDescription = if(meal.isExpanded) {
+                            stringResource(id = R.string.collapse)
+                        } else stringResource(id = R.string.extend)
                     )
                 }
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ){
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     UnitDisplay(
                         amount = meal.calories,
                         unit = stringResource(id = R.string.kcal),
-                        amountTextSize = 30.sp,
+                        amountTextSize = 30.sp
                     )
-                    Row(){
-                        NutrientsInfo(
+                    Row {
+                        NutrientInfo(
                             name = stringResource(id = R.string.carbs),
                             amount = meal.carbs,
                             unit = stringResource(id = R.string.grams)
                         )
                         Spacer(modifier = Modifier.width(spacing.spaceSmall))
-
-                        NutrientsInfo(
+                        NutrientInfo(
                             name = stringResource(id = R.string.protein),
                             amount = meal.protein,
                             unit = stringResource(id = R.string.grams)
                         )
                         Spacer(modifier = Modifier.width(spacing.spaceSmall))
-                        NutrientsInfo(
+                        NutrientInfo(
                             name = stringResource(id = R.string.fat),
                             amount = meal.fat,
                             unit = stringResource(id = R.string.grams)
                         )
                     }
                 }
-
-
-
             }
-
         }
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
         AnimatedVisibility(visible = meal.isExpanded) {
             content()
         }
-
-
     }
-
-
 }

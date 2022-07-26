@@ -16,54 +16,59 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class NutrientGoalViewModel @Inject constructor(
     private val preferences: Preferences,
-    private val filterOutdigits: FilterOutDigits,
+    private val filterOutDigits: FilterOutDigits,
     private val validateNutrients: ValidateNutrients
-): ViewModel(){
+): ViewModel() {
+
     var state by mutableStateOf(NutrientGoalState())
-    private set
+        private set
 
     private val _uiEvent = Channel<UIEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    fun onEvent(event:NutrientGoalEvent){
-        when(event){
+    fun onEvent(event: NutrientGoalEvent) {
+        when(event) {
             is NutrientGoalEvent.OnCarbRatioEnter -> {
-                state = state.copy(carbsRatio = filterOutdigits(event.ratio))
+                state = state.copy(
+                    carbsRatio = filterOutDigits(event.ratio)
+                )
             }
             is NutrientGoalEvent.OnProteinRatioEnter -> {
-                state = state.copy(proteinRatio = filterOutdigits(event.ratio))
+                state = state.copy(
+                    proteinRatio = filterOutDigits(event.ratio)
+                )
             }
             is NutrientGoalEvent.OnFatRatioEnter -> {
-                state = state.copy(fatRatio = filterOutdigits(event.ratio))
-
+                state = state.copy(
+                    fatRatio = filterOutDigits(event.ratio)
+                )
             }
             is NutrientGoalEvent.OnNextClick -> {
                 val result = validateNutrients(
-                    state.carbsRatio,
-                    state.proteinRatio,
-                    state.fatRatio
+                    carbsRatioText = state.carbsRatio,
+                    proteinRatioText = state.proteinRatio,
+                    fatRatioText = state.fatRatio
                 )
-                when(result){
-                    is ValidateNutrients.Result.Success ->{
+                when(result) {
+                    is ValidateNutrients.Result.Success -> {
                         preferences.saveCarbRatio(result.carbsRatio)
                         preferences.saveProteinRatio(result.proteinRatio)
                         preferences.saveFatRatio(result.fatRatio)
-                        viewModelScope.launch{
-                            _uiEvent.send(UIEvent.Navigate(Route.TRACKER_OVERVIEW))
+                        viewModelScope.launch {
+                            _uiEvent.send(UIEvent.Success)
                         }
                     }
-                    is ValidateNutrients.Result.Error ->{
-                        viewModelScope.launch{
+                    is ValidateNutrients.Result.Error -> {
+                        viewModelScope.launch {
                             _uiEvent.send(UIEvent.ShowSnackbar(result.message))
                         }
                     }
                 }
             }
-
         }
     }
-
 }

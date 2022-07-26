@@ -7,6 +7,7 @@ import com.practice.core.domain.model.GoalType
 import com.practice.core.domain.model.UserInfo
 import com.practice.core.domain.preferences.Preferences
 
+
 class DefaultPreferences(
     private val sharedPref: SharedPreferences
 ): Preferences {
@@ -89,13 +90,13 @@ class DefaultPreferences(
         )
     }
 
-    override fun saveShouldShowOnBoarding(shouldShow: Boolean) {
+    override fun saveShouldShowOnboarding(shouldShow: Boolean) {
         sharedPref.edit()
             .putBoolean(Preferences.KEY_SHOULD_SHOW_ONBOARDING, shouldShow)
             .apply()
     }
 
-    override fun loadShouldShowOnBoarding(): Boolean {
+    override fun loadShouldShowOnboarding(): Boolean {
         return sharedPref.getBoolean(
             Preferences.KEY_SHOULD_SHOW_ONBOARDING,
             true

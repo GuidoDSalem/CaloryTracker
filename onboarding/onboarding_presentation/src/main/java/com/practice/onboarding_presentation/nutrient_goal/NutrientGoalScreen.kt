@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.collect
 @Composable
 fun NutrientGoalScreen(
     scaffoldState: ScaffoldState,
-    onNavigate: (UIEvent.Navigate) -> Unit,
+    onNextClick: () -> Unit,
     viewModel: NutrientGoalViewModel = hiltViewModel()
 ) {
     val spacing = LocalSpacing.current
@@ -33,7 +33,7 @@ fun NutrientGoalScreen(
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is UIEvent.Navigate -> onNavigate(event)
+                is UIEvent.Success -> onNextClick()
                 is UIEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message.asString(context)
@@ -62,7 +62,7 @@ fun NutrientGoalScreen(
                 value = viewModel.state.carbsRatio,
                 onValueChange = {
                     viewModel.onEvent(NutrientGoalEvent.OnCarbRatioEnter(it))
-                                },
+                },
                 unit = stringResource(id = R.string.percent_carbs)
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))

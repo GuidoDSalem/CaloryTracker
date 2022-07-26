@@ -19,40 +19,41 @@ import com.practice.core.domain.model.ActivityLevel
 import com.practice.core.domain.model.Gender
 import com.practice.onboarding_presentation.components.ActionButton
 import com.practice.onboarding_presentation.components.SelectableButton
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
+
+
 
 @Composable
 fun ActivityScreen(
-    onNavigate:(UIEvent.Navigate) ->Unit,
+    onNextClick: () -> Unit,
     viewModel: ActivityViewModel = hiltViewModel()
 ) {
     val spacing = LocalSpacing.current
-    LaunchedEffect(key1 = true){
-        viewModel.uiEvent.collect{ event ->
-            when(event){
-                is UIEvent.Navigate -> onNavigate(event)
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UIEvent.Success -> onNextClick()
                 else -> Unit
             }
         }
     }
-    
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(spacing.spaceLarge)
-
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Text(
                 text = stringResource(id = R.string.whats_your_activity_level),
                 style = MaterialTheme.typography.h3
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
-            Row() {
+            Row {
                 SelectableButton(
                     text = stringResource(id = R.string.low),
                     isSelected = viewModel.selectedActivityLevel is ActivityLevel.Low,
@@ -97,7 +98,6 @@ fun ActivityScreen(
             text = stringResource(id = R.string.next),
             onClick = viewModel::onNextClick,
             modifier = Modifier.align(Alignment.BottomEnd)
-
         )
     }
 }

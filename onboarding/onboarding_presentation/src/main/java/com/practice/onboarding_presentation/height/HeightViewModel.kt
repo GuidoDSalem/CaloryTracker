@@ -19,11 +19,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class HeightViewModel @Inject constructor(
     private val preferences: Preferences,
-    private val filterOutDigits: FilterOutDigits): ViewModel() {
+    private val filterOutDigits: FilterOutDigits
+): ViewModel() {
 
     var height by mutableStateOf("180")
         private set
@@ -48,7 +48,7 @@ class HeightViewModel @Inject constructor(
                 return@launch
             }
             preferences.saveHeight(heightNumber)
-            _uiEvent.send(UIEvent.Navigate(Route.WEIGHT))
+            _uiEvent.send(UIEvent.Success)
         }
     }
 }

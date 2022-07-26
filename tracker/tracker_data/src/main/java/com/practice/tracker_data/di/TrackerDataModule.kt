@@ -1,8 +1,8 @@
-package com.practice.tracker_data.remote.di
+package com.practice.tracker_data.di
 
 import android.app.Application
 import androidx.room.Room
-import com.practice.tracker_data.local.TrackerDataBase
+import com.practice.tracker_data.local.TrackerDatabase
 import com.practice.tracker_data.remote.OpenFoodApi
 import com.practice.tracker_data.repository.TrackerRepositoryImpl
 import com.practice.tracker_domain.repository.TrackerRepository
@@ -16,7 +16,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
-
 @Module
 @InstallIn(SingletonComponent::class)
 object TrackerDataModule {
@@ -26,10 +25,11 @@ object TrackerDataModule {
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(
-                HttpLoggingInterceptor().apply{
+                HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
-            ).build()
+            )
+            .build()
     }
 
     @Provides
@@ -45,21 +45,20 @@ object TrackerDataModule {
 
     @Provides
     @Singleton
-
-    fun provideTrackerDatabase(app: Application): TrackerDataBase{
+    fun provideTrackerDatabase(app: Application): TrackerDatabase {
         return Room.databaseBuilder(
-                app,
-                TrackerDataBase::class.java,
-                "tracker_db"
+            app,
+            TrackerDatabase::class.java,
+            "tracker_db"
         ).build()
     }
 
     @Provides
     @Singleton
     fun provideTrackerRepository(
-        api:OpenFoodApi,
-        db: TrackerDataBase
-    ): TrackerRepository{
+        api: OpenFoodApi,
+        db: TrackerDatabase
+    ): TrackerRepository {
         return TrackerRepositoryImpl(
             dao = db.dao,
             api = api

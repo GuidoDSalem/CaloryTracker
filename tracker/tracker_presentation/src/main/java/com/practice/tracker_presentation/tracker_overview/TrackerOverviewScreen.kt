@@ -24,32 +24,24 @@ import com.practice.tracker_presentation.tracker_overview.components.TrackedFood
 @ExperimentalCoilApi
 @Composable
 fun TrackerOverviewScreen(
-    onNavigate: (UIEvent.Navigate) -> Unit,
-    viewModel: TrackerOverviewViewModel = hiltViewModel(),
-    ) {
+    onNavigateToSearch: (String, Int, Int, Int) -> Unit,
+    viewModel: TrackerOverviewViewModel = hiltViewModel()
+) {
     val spacing = LocalSpacing.current
     val state = viewModel.state
     val context = LocalContext.current
-    LaunchedEffect(key1 = context){
-        viewModel.uiEvent.collect { event ->
-            when(event){
-                is UIEvent.Navigate -> onNavigate(event)
-                else -> Unit
-            }
-
-        }
-    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = spacing.spaceMedium)
-    ){
-        item{
+    ) {
+        item {
             NutrientsHeader(state = state)
+            Spacer(modifier = Modifier.height(spacing.spaceMedium))
             DaySelector(
                 date = state.date,
                 onPreviousDayClick = {
-                     viewModel.onEvent(TrackerOverviewEvent.OnPreviousDayClick)
+                    viewModel.onEvent(TrackerOverviewEvent.OnPreviousDayClick)
                 },
                 onNextDayClick = {
                     viewModel.onEvent(TrackerOverviewEvent.OnNextDayClick)
@@ -59,37 +51,51 @@ fun TrackerOverviewScreen(
                     .padding(horizontal = spacing.spaceMedium)
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
-
         }
-        items(state.meals){meal ->
-            ExpandableMeal(meal = meal,
+        items(state.meals) { meal ->
+            ExpandableMeal(
+                meal = meal,
+                onToggleClick = {
+                    viewModel.onEvent(TrackerOverviewEvent.OnToggleMealClick(meal))
+                },
                 content = {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = spacing.spaceSmall),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceBetween
-                    ){
-                        state.trackedFood.forEach{ food ->
+                            .padding(horizontal = spacing.spaceSmall)
+                    ) {
+                        val foods = state.trackedFoods.filter { it.mealType == meal.mealType}
+                        foods.forEach { food ->
                             TrackedFoodItem(
                                 trackedFood = food,
-                                onDeletClick = { viewModel
-                                    .onEvent(TrackerOverviewEvent.OnDeleteTrackedFoodClick(food)) }
+                                onDeleteClick = {
+                                    viewModel.onEvent(
+                                        TrackerOverviewEvent
+                                            .OnDeleteTrackedFoodClick(food)
+                                    )
+                                }
                             )
                             Spacer(modifier = Modifier.height(spacing.spaceMedium))
-                            
                         }
-                        AddButton(text = stringResource(
-                            id = R.string.add_meal,meal.name.asString(context)),
-                            onClick = { viewModel.onEvent(TrackerOverviewEvent.OnAddFoodClick(meal))},
+                        AddButton(
+                            text = stringResource(
+                                id = R.string.add_meal,
+                                meal.name.asString(context)
+                            ),
+                            onClick = {
+                                onNavigateToSearch(
+                                    meal.name.asString(context),
+                                    state.date.dayOfMonth,
+                                    state.date.monthValue,
+                                    state.date.year
+                                )
+                            },
                             modifier = Modifier.fillMaxWidth()
                         )
-                         
                     }
                 },
-                onToggleClick = { viewModel.onEvent(TrackerOverviewEvent.OnToggleMealClick(meal)) },
-                modifier = Modifier.fillMaxWidth())
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

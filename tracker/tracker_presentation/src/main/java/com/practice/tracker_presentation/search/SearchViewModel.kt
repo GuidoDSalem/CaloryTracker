@@ -22,33 +22,29 @@ class SearchViewModel @Inject constructor(
     private val trackerUseCases: TrackerUseCases,
     private val filterOutDigits: FilterOutDigits
 ): ViewModel() {
+
     var state by mutableStateOf(SearchState())
         private set
 
     private val _uiEvent = Channel<UIEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    fun onEvent(event: SearchEvent){
-        when(event){
+    fun onEvent(event: SearchEvent) {
+        when(event) {
             is SearchEvent.OnQueryChange -> {
                 state = state.copy(query = event.query)
-
             }
             is SearchEvent.OnAmountForFoodChange -> {
                 state = state.copy(
-                    trackableFood = state.trackableFood.map{
-                        if(it.food == event.food){
-                            it.copy(
-                                amount = filterOutDigits(event.amount)
-                            )
-                        }
-                        else it
+                    trackableFood = state.trackableFood.map {
+                        if(it.food == event.food) {
+                            it.copy(amount = filterOutDigits(event.amount))
+                        } else it
                     }
                 )
             }
             is SearchEvent.OnSearch -> {
                 executeSearch()
-
             }
             is SearchEvent.OnToggleTrackableFood -> {
                 state = state.copy(
@@ -58,69 +54,56 @@ class SearchViewModel @Inject constructor(
                         } else it
                     }
                 )
-
             }
-            is SearchEvent.OnSearchFoucusChange -> {
+            is SearchEvent.OnSearchFocusChange -> {
                 state = state.copy(
-                    isHintVisible = !event.isFocus && state.query.isBlank()
+                    isHintVisible = !event.isFocused && state.query.isBlank()
                 )
-
             }
             is SearchEvent.OnTrackFoodClick -> {
                 trackFood(event)
             }
-
-
         }
     }
 
     private fun executeSearch() {
-        viewModelScope.launch{
+        viewModelScope.launch {
             state = state.copy(
                 isSearching = true,
                 trackableFood = emptyList()
             )
             trackerUseCases
                 .searchFood(state.query)
-                .onSuccess {foods ->
+                .onSuccess { foods ->
                     state = state.copy(
-                        trackableFood = foods.map{
-                            TrackableFoodUiState(
-                            it
-                            )
+                        trackableFood = foods.map {
+                            TrackableFoodUiState(it)
                         },
                         isSearching = false,
                         query = ""
                     )
-
-
                 }
                 .onFailure {
-                    state = state.copy(
-                        isSearching = false,
-                    )
+                    state = state.copy(isSearching = false)
                     _uiEvent.send(
-                        UIEvent.ShowSnackbar(UiText.StringResource(R.string.error_something_went_wrong))
-
+                        UIEvent.ShowSnackbar(
+                            UiText.StringResource(R.string.error_something_went_wrong)
+                        )
                     )
                 }
-
         }
     }
 
     private fun trackFood(event: SearchEvent.OnTrackFoodClick) {
-        viewModelScope.launch{
-            val uiState = state.trackableFood.find{ it.food == event.food}
+        viewModelScope.launch {
+            val uiState = state.trackableFood.find { it.food == event.food }
             trackerUseCases.trackFood(
-                food =  uiState?.food ?:return@launch,
+                food = uiState?.food ?: return@launch,
                 amount = uiState.amount.toIntOrNull() ?: return@launch,
                 mealType = event.mealType,
                 date = event.date
-
             )
             _uiEvent.send(UIEvent.NavigateUp)
-
         }
     }
-
 }

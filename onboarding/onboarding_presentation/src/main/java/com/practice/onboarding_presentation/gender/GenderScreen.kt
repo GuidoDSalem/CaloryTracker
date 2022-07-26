@@ -22,36 +22,34 @@ import kotlinx.coroutines.flow.collect
 
 @Composable
 fun GenderScreen(
-    onNavigate:(UIEvent.Navigate) ->Unit,
+    onNextClick: () -> Unit,
     viewModel: GenderViewModel = hiltViewModel()
 ) {
     val spacing = LocalSpacing.current
-    LaunchedEffect(key1 = true){
-        viewModel.uiEvent.collect{ event ->
-            when(event){
-                is UIEvent.Navigate -> onNavigate(event)
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UIEvent.Success -> onNextClick()
                 else -> Unit
             }
         }
     }
-    
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(spacing.spaceLarge)
-
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Text(
                 text = stringResource(id = R.string.whats_your_gender),
                 style = MaterialTheme.typography.h3
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
-            Row() {
+            Row {
                 SelectableButton(
                     text = stringResource(id = R.string.male),
                     isSelected = viewModel.selectedGender is Gender.Male,
@@ -83,7 +81,6 @@ fun GenderScreen(
             text = stringResource(id = R.string.next),
             onClick = viewModel::onNextClick,
             modifier = Modifier.align(Alignment.BottomEnd)
-
         )
     }
 }

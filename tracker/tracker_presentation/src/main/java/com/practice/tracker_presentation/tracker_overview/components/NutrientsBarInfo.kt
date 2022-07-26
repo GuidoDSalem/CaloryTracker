@@ -24,7 +24,7 @@ import com.practice.tracker_presentation.components.UnitDisplay
 
 
 @Composable
-fun NutrientsBarInfo(
+fun NutrientBarInfo(
     value: Int,
     goal: Int,
     name: String,
@@ -35,11 +35,13 @@ fun NutrientsBarInfo(
     val background = MaterialTheme.colors.background
     val goalExceededColor = MaterialTheme.colors.error
     val angleRatio = remember {
-        Animatable(initialValue = 0f,)
+        Animatable(0f)
     }
-    LaunchedEffect(key1 = value){
+    LaunchedEffect(key1 = value) {
         angleRatio.animateTo(
-            targetValue = if(goal>0)(value/goal.toFloat()) else 0f,
+            targetValue = if (goal > 0) {
+                value / goal.toFloat()
+            } else 0f,
             animationSpec = tween(
                 durationMillis = 300
             )
@@ -47,14 +49,13 @@ fun NutrientsBarInfo(
     }
     Box(
         modifier = modifier,
-        contentAlignment = Alignment.Center,
-
-    ){
+        contentAlignment = Alignment.Center
+    ) {
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f),
-        ){
+        ) {
             drawArc(
                 color = if(value <= goal) background else goalExceededColor,
                 startAngle = 0f,
@@ -66,7 +67,7 @@ fun NutrientsBarInfo(
                     cap = StrokeCap.Round
                 )
             )
-            if(value <= goal){
+            if(value <= goal) {
                 drawArc(
                     color = color,
                     startAngle = 90f,
@@ -81,22 +82,26 @@ fun NutrientsBarInfo(
             }
         }
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             UnitDisplay(
                 amount = value,
                 unit = stringResource(id = R.string.grams),
-                amountColor = if (value<= goal)MaterialTheme.colors.onPrimary else goalExceededColor,
-                unitColor = if (value<= goal)MaterialTheme.colors.onPrimary else goalExceededColor
+                amountColor = if(value <= goal) {
+                    MaterialTheme.colors.onPrimary
+                } else goalExceededColor,
+                unitColor = if(value <= goal) {
+                    MaterialTheme.colors.onPrimary
+                } else goalExceededColor
             )
             Text(
                 text = name,
-                color = if (value<= goal)MaterialTheme.colors.onPrimary else goalExceededColor,
+                color = if(value <= goal) {
+                    MaterialTheme.colors.onPrimary
+                } else goalExceededColor,
                 style = MaterialTheme.typography.body1,
                 fontWeight = FontWeight.Light
-
             )
         }
     }

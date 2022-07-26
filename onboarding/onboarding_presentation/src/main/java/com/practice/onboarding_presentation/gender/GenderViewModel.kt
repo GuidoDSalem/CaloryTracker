@@ -19,20 +19,21 @@ import javax.inject.Inject
 class GenderViewModel @Inject constructor(
     private val preferences: Preferences
 ): ViewModel() {
+
     var selectedGender by mutableStateOf<Gender>(Gender.Male)
         private set
+
     private val _uiEvent = Channel<UIEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    fun onGenderClick(gender: Gender){
+    fun onGenderClick(gender: Gender) {
         selectedGender = gender
     }
 
-    fun onNextClick(){
-        viewModelScope.launch{
+    fun onNextClick() {
+        viewModelScope.launch {
             preferences.saveGender(selectedGender)
-            _uiEvent.send(UIEvent.Navigate(Route.AGE))
+            _uiEvent.send(UIEvent.Success)
         }
-
     }
 }

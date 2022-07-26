@@ -25,16 +25,15 @@ import kotlinx.coroutines.flow.collect
 @Composable
 fun WeightScreen(
     scaffoldState: ScaffoldState,
-    onNavigate: (UIEvent.Navigate) -> Unit,
+    onNextClick: () -> Unit,
     viewModel: WeightViewModel = hiltViewModel()
-
 ) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
-    LaunchedEffect(key1 = true){
-        viewModel.uiEvent.collect{ event ->
-            when(event){
-                is UIEvent.Navigate -> onNavigate(event)
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UIEvent.Success -> onNextClick()
                 is UIEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message.asString(context)
@@ -44,18 +43,16 @@ fun WeightScreen(
             }
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(spacing.spaceLarge)
-
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Text(
                 text = stringResource(id = R.string.whats_your_weight),
                 style = MaterialTheme.typography.h3
@@ -71,7 +68,6 @@ fun WeightScreen(
             text = stringResource(id = R.string.next),
             onClick = viewModel::onNextClick,
             modifier = Modifier.align(Alignment.BottomEnd)
-
         )
     }
 }

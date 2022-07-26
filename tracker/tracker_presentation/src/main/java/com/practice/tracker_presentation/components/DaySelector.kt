@@ -19,8 +19,8 @@ import java.time.LocalDate
 @Composable
 fun DaySelector(
     date: LocalDate,
-    onPreviousDayClick:() -> Unit,
-    onNextDayClick: ()-> Unit,
+    onPreviousDayClick: () -> Unit,
+    onNextDayClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -34,19 +34,15 @@ fun DaySelector(
                 contentDescription = stringResource(id = R.string.previous_day)
             )
         }
-
         Text(
             text = parseDateText(date = date),
             style = MaterialTheme.typography.h2
         )
-
-
         IconButton(onClick = onNextDayClick) {
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = stringResource(id = R.string.next_day)
             )
         }
-    
     }
 }
